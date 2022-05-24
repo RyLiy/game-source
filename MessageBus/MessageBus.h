@@ -11,11 +11,14 @@ class MessageBus {
 
 public:
 	void addNode(MessageBusNode node);
-	void sendMessage(Message msg);
-	
+	void sendMessage(Message *msg);
+	void notify();
+	void addNode(MessageBusNode node, std::optional<std::string> nodeClass);
 
-void notify();
+private:
+	std::vector<MessageBusNode> nodes;
+	std::vector<Message*> messageQueue;
 
-
-void addNode(MessageBusNode node, std::optional<std::string> nodeClass);
+	//Creates a map structure to classify what system space a node belongs to. (E.g., does the node belong to the input system, render system, game-logic system, etc.) 
+	map<std::string, std::vector<MessageBusNode>> nodeClass;
 };

@@ -1,8 +1,6 @@
 #pragma once
 #include <vector>
 #include <iostream>
-//#include "MessageBus.h"
-#include "MessageBusNode.h"
 
 class MessageBus;
 class Message;
@@ -17,5 +15,4 @@ public:
 
 private:
 	MessageBus *bus;
-	std::vector<Message*> msgs;
 };
