@@ -13,7 +13,7 @@ public:
 	void addNode(MessageBusNode node);
 	void sendMessage(Message *msg);
 	void notify();
-	void addNode(MessageBusNode node, std::optional<std::string> nodeClass);
+	//void addNode(MessageBusNode node, std::optional<std::string> nodeClass);
 
 private:
 	std::vector<MessageBusNode> nodes;

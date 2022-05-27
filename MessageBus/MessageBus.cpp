@@ -21,40 +21,45 @@
 
 	void MessageBus::sendMessage(Message *msg) {
 		messageQueue.push_back(msg);
-
+		notify();
 	}
 
 	void MessageBus::notify() {
-		for (int i = 0; i > messageQueue.size(); i++) { //iterates through message queue
+		//for (auto ite = messageQueue.begin(); ite != messageQueue.end(); ite++) { //iterates through message queue
+		for (auto message: messageQueue) { //iterates through message queue
 			Message msg = *(messageQueue.back()); 
 			messageQueue.pop_back();
-			bool exists;
+			bool exists = false;
 
-			for (auto node : nodes) {
+			/*for (auto node : nodes) {
 				if (&node == msg.systemComponent.value()) {
 					exists = true;
 				}
 
-			}
+			}*/
 
 
 			//auto it = std::find(nodes.begin(), nodes.end(), msg.systemComponent.value());
 			//if ( it != nodes.end()) { //if the message is to be delivered to a single node on the bus, instead of an entire system space.
 			//	msg.systemComponent.value()->receiveMessage(&msg);
 			//}
-			if (exists) {
-				msg.systemComponent.value()->receiveMessage(&msg);
-			}
-			else {
-				for (auto iterate = nodes.begin(); iterate != nodes.end(); iterate++) { //send the message to all nodes in the bus. I.e., all system spaces.
-					(*iterate).receiveMessage(&msg);
-				}
-			}
+			
+			//if (exists) {
+			//	msg.systemComponent.value()->receiveMessage(&msg);
+			//}
+			//else {
+			//	for (auto iterate = nodes.begin(); iterate != nodes.end(); iterate++) { //send the message to all nodes in the bus. I.e., all system spaces.
+			//		(*iterate).receiveMessage(&msg);
+			//	}
+			//}
 
-			for (auto iter = nodeClass.at(msg.systemSpace).begin(); iter != nodeClass.at(msg.systemSpace).end(); iter++) { //if message is directed towards a certain system space. If empty, the for loop will not execute.
-				(*iter).receiveMessage(&msg);
-			}
+			//for (auto iter = nodeClass.at(msg.systemSpace).begin(); iter != nodeClass.at(msg.systemSpace).end(); iter++) { //if message is directed towards a certain system space. If empty, the for loop will not execute.
+			//	(*iter).receiveMessage(&msg);
+			//}
 
+			for (auto iterate = nodes.begin(); iterate != nodes.end(); iterate++) { //send the message to all nodes in the bus. I.e., all system spaces.
+				(*iterate).receiveMessage(&msg);
+			}
 		}
 	}
 

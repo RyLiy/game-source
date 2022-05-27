@@ -8,7 +8,7 @@ int main() {
 	bus.addNode(testAxel);
 	testAxel.setBus(&bus);
 
-	testAxel.sendMessage(new Message("Hello!"));
+	testAxel.sendMessage(new Message("EVENT triggered"));
 
 
 	return 0;
