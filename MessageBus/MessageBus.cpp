@@ -26,10 +26,23 @@
 
 	void MessageBus::notify() {
 		for (int i = 0; i > messageQueue.size(); i++) { //iterates through message queue
-			auto msg = *messageQueue.back(); 
+			Message msg = *(messageQueue.back()); 
 			messageQueue.pop_back();
-			
-			if (std::find(nodes.begin(), nodes.end(), msg.systemComponent) != nodes.end()) { //if the message is to be delivered to a single node on the bus, instead of an entire system space.
+			bool exists;
+
+			for (auto node : nodes) {
+				if (&node == msg.systemComponent.value()) {
+					exists = true;
+				}
+
+			}
+
+
+			//auto it = std::find(nodes.begin(), nodes.end(), msg.systemComponent.value());
+			//if ( it != nodes.end()) { //if the message is to be delivered to a single node on the bus, instead of an entire system space.
+			//	msg.systemComponent.value()->receiveMessage(&msg);
+			//}
+			if (exists) {
 				msg.systemComponent.value()->receiveMessage(&msg);
 			}
 			else {
@@ -45,8 +58,3 @@
 		}
 	}
 
-
-	void MessageBus::addNode(MessageBusNode node, std::optional<std::string> nodeClass) {
-
-
-	}
