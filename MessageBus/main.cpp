@@ -6,7 +6,7 @@ int main() {
 	MessageBus bus;
 	MessageBusNode input_handler, audio_component, character_handler, render_engine;
 
-	bus.addNode(std::vector<MessageBusNode*>{&input_handler, &audio_component, &character_handler, &render_engine});
+	bus.addNodes(std::vector<MessageBusNode*>{&input_handler, &audio_component, &character_handler, &render_engine});
 
 	input_handler.sendMessage("W_PRESSED");
 

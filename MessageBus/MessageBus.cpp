@@ -13,12 +13,12 @@
 	- Create a better way to modify the map. I.e., add or remove nodes on the bus.
 	- Once all is done, probably refactor the map name (currently: nodeClass) into the name systemMap or engineMap. From thereafter, the map will play a central role for the message bus; every component (read: class or object) in the entire engine should be able to be referenced from it.*/
 
-	void MessageBus::addNode(MessageBusNode *node) {
+	void MessageBus::addNodes(MessageBusNode *node) {
 		nodes.push_back(node);
 		syncBusNode(std::vector<MessageBusNode*>{node});
 	}
 
-	void MessageBus::addNode(std::vector<MessageBusNode*> nodeList) {
+	void MessageBus::addNodes(std::vector<MessageBusNode*> nodeList) {
 		this->nodes.insert(nodes.end(), nodeList.begin(), nodeList.end());
 		syncBusNode(nodeList);
 	}

@@ -10,8 +10,8 @@ using namespace std;
 class MessageBus {
 
 public:
-	void addNode(MessageBusNode *node);
-	void addNode(std::vector<MessageBusNode*> nodeList);
+	void addNodes(MessageBusNode *node);
+	void addNodes(std::vector<MessageBusNode*> nodeList);
 	void syncBusNode(std::vector<MessageBusNode*> nodeList);
 	void sendMessage(Message *msg);
 	void notify();
