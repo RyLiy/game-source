@@ -9,7 +9,11 @@ class MessageBusNode {
 public:
 	virtual void receiveMessage(Message *event);
 
-	void sendMessage(Message *msg);
+	void sendMessage(std::string msg);
+
+	void sendMessage(std::string msg, MessageBusNode* reciever);
+
+	void sendMessage(std::string msg, std::vector<MessageBusNode*> recievers);
 
 	void setBus(MessageBus *bus);
 

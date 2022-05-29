@@ -4,12 +4,13 @@
 
 int main() {
 	MessageBus bus;
-	MessageBusNode testAxel;
-	bus.addNode(testAxel);
-	testAxel.setBus(&bus);
+	MessageBusNode input_handler, audio_component, character_handler, render_engine;
 
-	testAxel.sendMessage(new Message("EVENT triggered"));
+	bus.addNode(std::vector<MessageBusNode*>{&input_handler, &audio_component, &character_handler, &render_engine});
 
+	input_handler.sendMessage("W_PRESSED");
+
+	character_handler.sendMessage("FOOTSTEP_NOISE", &audio_component);
 
 	return 0;
 }

@@ -3,26 +3,36 @@
 #include <optional>
 #include <iostream>
 
-Message::Message(std::string EVENT, std::optional<std::string> system, std::optional<MessageBusNode*> component) { 
-	this->event = EVENT;
 
-	if (system.has_value()) {
-		systemSpace = system.value();
-	}
+Message::Message(std::string event, MessageBusNode* sender, MessageBusNode* component) {
+	this->event = event;
+	std::vector<MessageBusNode*> cList{ component };
+	componentList = cList;
+	this->sender = sender;
+}
 
-	if (component.has_value()) {
-		systemComponent = component;
-	}
+Message::Message(std::string event, MessageBusNode* sender, std::vector<MessageBusNode*> components) {
+	this->event = event;
+	componentList = components;
+	this->sender = sender;
 }
 
 
-Message::Message(std::string EVENT) {
-	this->event = EVENT;
+Message::Message(std::string event, MessageBusNode *sender) {
+	this->event = event;
+	this->sender = sender;
 }
 
 	std::string Message::getMessage() {
 		return event;
 	}
 
+	MessageBusNode* Message::getSender() {
+		return sender;
+	}
+	
+	std::vector<MessageBusNode*> Message::getRecipients() {
+		return componentList;
+	}
 
 

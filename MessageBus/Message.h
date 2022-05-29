@@ -5,12 +5,15 @@
 
 class Message {
 public:
-	std::string systemSpace;
-	std::optional<MessageBusNode*> systemComponent;
-	Message(std::string EVENT, std::optional<std::string> system, std::optional<MessageBusNode*> component);
-	Message(std::string EVENT);
+	Message(std::string event, MessageBusNode* sender, MessageBusNode* component);
+	Message(std::string event, MessageBusNode* sender, std::vector<MessageBusNode*> component);
+	Message(std::string event, MessageBusNode *sender);
 	std::string getMessage();
+	MessageBusNode* getSender();
+	std::vector<MessageBusNode*> getRecipients();
 private: //private to prevent modification
 	std::string event;
+	MessageBusNode *sender;
+	std::vector<MessageBusNode*> componentList;
 };
 
