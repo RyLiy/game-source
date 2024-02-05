@@ -1,149 +1,189 @@
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBusNode.h"
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBus.h"
-#include "C:\Users\Zer0v\source\repos\Game\OpenGL\Window.h"
+#include "../MessageBus/MessageBusNode.h"
+#include "../MessageBus/MessageBus.h"
+#include "../OpenGL/GLFW.h"
+#include "../Framework/Framework.h"
+
+
 #include<iostream>
 #include <cstdlib>
 #include <ctime>
 #include <chrono>
 #include <thread>
-class AudioDriver : public MessageBusNode {
-public:
-	void receiveMessage(Message* msg) {
-		MessageBusNode::receiveMessage(msg); //Call same method signature from derived class. I.e,. the non over-written "recieveMessage" function. This function will merely output what the message is, and where it came from. 
-		std::string event = msg->getMessage();
+#include <unordered_map>
 
-		if ((event == ("character_move_fwd")) || (event == ("character_move_left")) || (event == ("character_move_bottom")) || (event == ("character_move_right"))) {
-			std::cout << "Object " << this << " plays footstep." << std::endl;
-			this->sendMessage("play_footstep.wav");
-		}
-	}
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
-	AudioDriver(): MessageBusNode() {}
+/*
+	Sample Logic class to test message bus functionality.
+*/
+enum class CharacterEvent {
+	MoveForward,
+	MoveLeft,
+	MoveRight,
+	MoveBottom,
+	OpenInventory,
+	CloseInventory
+};
 
+std::unordered_map<std::string, CharacterEvent> eventMap = {
+	{"W_pressed", CharacterEvent::MoveForward},
+	{"A_pressed", CharacterEvent::MoveLeft},
+	{"S_pressed", CharacterEvent::MoveBottom},
+	{"D_pressed", CharacterEvent::MoveRight},
+	{"J_pressed", CharacterEvent::OpenInventory},
+	{"K_pressed", CharacterEvent::CloseInventory}
 };
 
 class OpenGL_Shader : public MessageBusNode {
-	
+
 public:
-	OpenGL_Shader() {}
-	void receiveMessage(Message* msg) {
+	void receiveMessage(Message* msg) override {
 		MessageBusNode::receiveMessage(msg);
 		std::string event = msg->getMessage();
 
-		if (event == ("character_move_fwd")) {
-			std::cout << "Object " << this << " draws character frame 20px higher." << std::endl;
-		} else if (event == ("character_move_left")) {
-			std::cout << "Object " << this << " draws character frame 20px left." << std::endl;
+		auto iter = eventMap.find(event);
+		if (iter != eventMap.end()) {
+			handleCharacterEvent(iter->second);
 		}
-		else if (event == ("character_move_right")) {
-			std::cout << "Object " << this << " draws character frame 20px right." << std::endl;
-		}
-		else if (event == ("character_move_bottom")) {
-			std::cout << "Object " << this << " draws character frame 20px lower." << std::endl;
-		}
-		else if (event == ("inventory_open")) {
+	}
+
+private:
+	void handleCharacterEvent(CharacterEvent event) {
+		switch (event) {
+		case CharacterEvent::MoveForward:
+			handleCharacterMove("draws character frame 20px higher.");
+			break;
+		case CharacterEvent::MoveLeft:
+			handleCharacterMove("draws character frame 20px left.");
+			break;
+		case CharacterEvent::MoveRight:
+			handleCharacterMove("draws character frame 20px right.");
+			break;
+		case CharacterEvent::MoveBottom:
+			handleCharacterMove("draws character frame 20px lower.");
+			break;
+		case CharacterEvent::OpenInventory:
 			std::cout << "Object " << this << " draws inventory open." << std::endl;
-		}
-		else if (event == ("inventory_close")) {
+			break;
+		case CharacterEvent::CloseInventory:
 			std::cout << "Object " << this << " clears inventory frame" << std::endl;
+			break;
 		}
 	}
 
-};
-
-class InputDriver : public MessageBusNode {
-	
-public:
-	InputDriver() {}
-	void receiveMessage(Message* msg) {
-		MessageBusNode::receiveMessage(msg);
-		std::string event = msg->getMessage();
-		//std::cout << "Object " << this << " recieves input: " << event.at(0) << std::endl;
-		
+	void handleCharacterMove(const std::string& action) {
+		std::cout << "Object " << this << ' ' << action << std::endl;
 	}
-	
-
 };
+
 
 class Character : public MessageBusNode {
-	
 public:
-	//Character() : MessageBusNode (){}
-	void receiveMessage(Message* msg) {
+	void receiveMessage(Message* msg) override {
 		MessageBusNode::receiveMessage(msg);
 		std::string event = msg->getMessage();
 
-		if (event == "W_pressed") {
-			this->sendMessage("character_move_fwd");
-		}
-		else if (event == "A_pressed") {
-			this->sendMessage("character_move_left");
-		}
-		else if (event == "S_pressed") {
-			this->sendMessage("character_move_bottom");
-		}
-		else if (event == "D_pressed") {
-			this->sendMessage("character_move_right");
-		}
-		else if (event == "J_pressed") {
-			this->sendMessage("inventory_open");
-		}
-		else if (event == "K_pressed") {
-			this->sendMessage("inventory_close");
+		auto iter = eventMap.find(event);
+		if (iter != eventMap.end()) {
+			switch (iter->second) {
+			case CharacterEvent::MoveForward:
+				this->sendMessage("character_move_fwd");
+				break;
+			case CharacterEvent::MoveLeft:
+				this->sendMessage("character_move_left");
+				break;
+			case CharacterEvent::MoveRight:
+				this->sendMessage("character_move_right");
+				break;
+			case CharacterEvent::MoveBottom:
+				this->sendMessage("character_move_bottom");
+				break;
+			case CharacterEvent::OpenInventory:
+				this->sendMessage("inventory_open");
+				break;
+			case CharacterEvent::CloseInventory:
+				this->sendMessage("inventory_close");
+				break;
+			}
 		}
 	}
+};
+
+//Game Window
+GLFWwindow* window;
+MessageBus engineBus;
+InputDriver input_handler;
+
+
+void keyCallback(GLFWwindow* wind, int key, int scancode, int action, int mods) {
+	input_handler.key_callback(window, key, scancode, action, mods);
+}
+
+void inputLoop(InputDriver* inputHandler) {
+	InputDriver input_handler = *inputHandler;
+
+	/*
+	Issue: callback has to be a static method or a non-member function. It cannot be an instanced variable. Nonstatic methods require a this pointer, which is a parameter that GLFW is not expecting. 
+	Callback has to send a message to the messagebus. Messagebus nodes have to be instanced types (objects). Therefore, callback has to send a message to the messagebus using an object (input_handler of type InputDriver), which was instantiated in a different class (main). 
+	The instanced object (input_handler) is a node on the message bus, and it's pointer/object variable has to be accessed from inside the callback to send a message. [I.e., input_handler->sendMessage(D_pressed)]
+
+	EZ Solution: Use non member function as wrapper.
+	*/
+	while (!glfwWindowShouldClose(window)) {
+		glfwSetKeyCallback(window, keyCallback);
+	}
+}
+
+void terminateWindow() {
+	glfwSetWindowShouldClose(window, GLFW_TRUE);
 
 };
 
-void *dummyLoop(InputDriver* inputHandler) {
-	InputDriver input_handler = *inputHandler;
-	while (true) {
-		int num = (rand() % 6 + 1);
-
-		if (num == 1) {
-			input_handler.sendMessage("W_pressed");
-		}
-		else if (num == 2) {
-			input_handler.sendMessage("A_pressed");
-		}
-		else if (num == 3) {
-			input_handler.sendMessage("S_pressed");
-		}
-		else if (num == 4) {
-			input_handler.sendMessage("D_pressed");
-		}
-		else if (num == 5) {
-			input_handler.sendMessage("J_pressed");
-		}
-		else if (num == 6) {
-			input_handler.sendMessage("K_pressed");
-		}
-		std::cout << num << "\n" << endl;
-		std::this_thread::sleep_for(std::chrono::seconds(1));
-	}
-
-}
 
 	int main() {
-		MessageBus engineBus;
+
 		//input_handler, audio_component, character_handler, render_engine;
-		AudioDriver audio_component;
+		Audio audio_driver;
 		OpenGL_Shader render_engine;
-		InputDriver input_handler;
+
 		Character character_handler;
 
+		//Loading the nodes onto the bus
 		engineBus.addNodes(std::vector<MessageBusNode*>{
-			&character_handler, &audio_component,
-				&render_engine,
-				&input_handler,
-				});
+			&character_handler, &audio_driver,
+				& render_engine,
+				& input_handler
+		});
 
-		//Execute debug console and message bus
-		thread thr1(dummyLoop,&input_handler);
+		// if glfw fails to open.
+		if (!glfwInit()) {
+			std::cout << "Failed" << std::endl;
+		}
 
-		Window window;
+		window = glfwCreateWindow(640, 480, "Game", NULL, NULL);
+
+		glfwMakeContextCurrent(window);
+		gladLoadGL();
+
+		//Deploy input handler thread
+		thread thr1(inputLoop, &input_handler);
+
+		//Game Loop
+		while (!glfwWindowShouldClose(window)) {
+
+			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+
+			glfwPollEvents();
+			glfwSwapBuffers(window);
+
+		}
 
 		thr1.join();
+		//thr2.join();
+
+		glfwTerminate();
 		return 0;
 	}
 

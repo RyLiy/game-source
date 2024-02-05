@@ -2,11 +2,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-class Window {
+class GLFW {
 public:
-	Window();
+	GLFW();
+	void terminateWindow();
 	GLFWwindow* getWindow();
-
 private:
 	GLFWwindow* window;
 

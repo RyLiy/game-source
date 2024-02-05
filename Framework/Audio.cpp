@@ -1,14 +1,15 @@
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBusNode.h"
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBus.h"
+#include "../Framework/Framework.h"
 
-class Audio : public MessageBusNode {
-public:
-	void receiveMessage(Message* msg) {
-		MessageBusNode::receiveMessage(msg);
+/*
+Audio test class for messagebus.
+*/
+
+	void Audio::receiveMessage(Message* msg) {
+		MessageBusNode::receiveMessage(msg); //Call same method signature from derived class. I.e,. the non over-written "recieveMessage" function. This function will merely output what the message is, and where it came from. 
 		std::string event = msg->getMessage();
 
+		if ((event == ("character_move_fwd")) || (event == ("character_move_left")) || (event == ("character_move_bottom")) || (event == ("character_move_right"))) {
+			std::cout << "Object " << this << " plays footstep.way" << std::endl;
+			//this->sendMessage("play_footstep.wav");
+		}
 	}
-
-	Audio() : MessageBusNode() {}
-
-};
