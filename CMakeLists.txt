@@ -6,3 +6,14 @@ SET(MSVC_INCREMENTAL_DEFAULT ON)
 
 PROJECT(GAME_ENGINE)
 
+# Find GLFW package
+find_package(glfw3 REQUIRED)
+
+# Add your project's executable
+add_executable(GameLogic src/main.cpp)
+
+# Add subprojects
+add_subdirectory(Framework)
+add_subdirectory(MessageBus)
+add_subdirectory(OpenGL)
+add_subdirectory(GameLogic)
