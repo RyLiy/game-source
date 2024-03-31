@@ -9,7 +9,7 @@ PROJECT(GAME_ENGINE)
 # Add project's executable
 add_executable(GameLogic GameLogic/src/main.cpp OpenGL/src/glad.c)
 
-target_link_libraries(GameLogic PRIVATE OpenGL glfw MessageBus)
+target_link_libraries(GameLogic PRIVATE OpenGL glfw Framework MessageBus)
 
 # Add subprojects
 add_subdirectory(glfw-3.4)

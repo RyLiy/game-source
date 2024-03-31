@@ -1,9 +1,6 @@
-#include <OpenGL/glad.h>
-#include <GLFW/glfw3.h>
-#include "C:\Users\Zer0v\source\repos\Game\OpenGL\GLFW.h"
-
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBusNode.h"
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBus.h"
+#include "glad.h"
+#include <iostream>
+#include <GLFW.h>
 
 
 GLFW::GLFW()

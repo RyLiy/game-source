@@ -1,5 +1,4 @@
-#include "../Framework/Framework.h"
-
+#include "Framework.h"
 /*
 Input test class for messagebus.
 */
