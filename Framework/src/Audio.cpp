@@ -1,4 +1,4 @@
-#include "../Framework/Framework.h"
+#include "Framework.h"
 
 /*
 Audio test class for messagebus.

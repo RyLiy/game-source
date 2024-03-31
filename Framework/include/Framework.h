@@ -1,5 +1,5 @@
 #pragma once
-#include "../../MessageBus/include/MessageBus.h"
+#include "MessageBus.h"
 #include "GLFW/glfw3.h"
 class InputDriver : public MessageBusNode {
 public:

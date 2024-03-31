@@ -16,4 +16,6 @@ set(SOURCES
 # Create library target and add sources
 add_library(Framework ${SOURCES})
 
+target_link_libraries(Framework PRIVATE OpenGL glfw MessageBus)
+
 target_include_directories(Framework PUBLIC include)

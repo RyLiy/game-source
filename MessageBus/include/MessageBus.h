@@ -43,6 +43,7 @@ public:
     virtual void receiveMessage(Message* event);
     void sendMessage(std::string msg);
     void sendMessage(std::string msg, MessageBusNode* receiver);
+
     void sendMessage(std::string msg, std::vector<MessageBusNode*> receivers);
     void setBus(MessageBus* bus);
 
