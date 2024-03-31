@@ -1,8 +1,11 @@
-#include "../MessageBus/MessageBusNode.h"
-#include "../MessageBus/MessageBus.h"
-#include "../OpenGL/GLFW.h"
-#include "../Framework/Framework.h"
+#include "glad.h"
 
+ // GLFW is the one in the FRAMEWORK, not the native header. This must change.
+#include "GLFW.h"
+
+
+#include "MessageBus.h"
+#include "../../Framework/include/Framework.h"
 
 #include<iostream>
 #include <cstdlib>
@@ -11,12 +14,11 @@
 #include <thread>
 #include <unordered_map>
 
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 /*
 	Sample Logic class to test message bus functionality.
 */
+
 enum class CharacterEvent {
 	MoveForward,
 	MoveLeft,
@@ -124,8 +126,8 @@ void inputLoop(InputDriver* inputHandler) {
 	InputDriver input_handler = *inputHandler;
 
 	/*
-	Issue: callback has to be a static method or a non-member function. It cannot be an instanced variable. Nonstatic methods require a this pointer, which is a parameter that GLFW is not expecting. 
-	Callback has to send a message to the messagebus. Messagebus nodes have to be instanced types (objects). Therefore, callback has to send a message to the messagebus using an object (input_handler of type InputDriver), which was instantiated in a different class (main). 
+	Issue: callback has to be a static method or a non-member function. It cannot be an instanced variable. Nonstatic methods require a this pointer, which is a parameter that GLFW is not expecting.
+	Callback has to send a message to the messagebus. Messagebus nodes have to be instanced types (objects). Therefore, callback has to send a message to the messagebus using an object (input_handler of type InputDriver), which was instantiated in a different class (main).
 	The instanced object (input_handler) is a node on the message bus, and it's pointer/object variable has to be accessed from inside the callback to send a message. [I.e., input_handler->sendMessage(D_pressed)]
 
 	EZ Solution: Use non member function as wrapper.
@@ -141,50 +143,50 @@ void terminateWindow() {
 };
 
 
-	int main() {
+int main() {
 
-		//input_handler, audio_component, character_handler, render_engine;
-		Audio audio_driver;
-		OpenGL_Shader render_engine;
+	//input_handler, audio_component, character_handler, render_engine;
+	Audio audio_driver;
+	OpenGL_Shader render_engine;
 
-		Character character_handler;
+	Character character_handler;
 
-		//Loading the nodes onto the bus
-		engineBus.addNodes(std::vector<MessageBusNode*>{
-			&character_handler, &audio_driver,
-				& render_engine,
-				& input_handler
-		});
+	//Loading the nodes onto the bus
+	engineBus.addNodes(std::vector<MessageBusNode*>{
+		&character_handler, & audio_driver,
+			& render_engine,
+			& input_handler
+	});
 
-		// if glfw fails to open.
-		if (!glfwInit()) {
-			std::cout << "Failed" << std::endl;
-		}
-
-		window = glfwCreateWindow(640, 480, "Game", NULL, NULL);
-
-		glfwMakeContextCurrent(window);
-		gladLoadGL();
-
-		//Deploy input handler thread
-		thread thr1(inputLoop, &input_handler);
-
-		//Game Loop
-		while (!glfwWindowShouldClose(window)) {
-
-			glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-
-			glfwPollEvents();
-			glfwSwapBuffers(window);
-
-		}
-
-		thr1.join();
-		//thr2.join();
-
-		glfwTerminate();
-		return 0;
+	// if glfw fails to open.
+	if (!glfwInit()) {
+		std::cout << "Failed" << std::endl;
 	}
+
+	window = glfwCreateWindow(640, 480, "Game", NULL, NULL);
+
+	glfwMakeContextCurrent(window);
+	gladLoadGL();
+
+	//Deploy input handler thread
+	std::thread thr1(inputLoop, &input_handler);
+
+	//Game Loop
+	while (!glfwWindowShouldClose(window)) {
+
+		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		glfwPollEvents();
+		glfwSwapBuffers(window);
+
+	}
+
+	thr1.join();
+	//thr2.join();
+
+	glfwTerminate();
+	return 0;
+}
 
 

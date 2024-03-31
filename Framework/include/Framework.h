@@ -1,8 +1,6 @@
 #pragma once
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBusNode.h"
-#include "C:\Users\Zer0v\source\repos\Game\MessageBus\MessageBus.h"
-#include "C:\Users\Zer0v\source\repos\Game\OpenGL\GLFW.h"
-
+#include "../../MessageBus/include/MessageBus.h"
+#include "GLFW/glfw3.h"
 class InputDriver : public MessageBusNode {
 public:
 	void receiveMessage(Message* msg);

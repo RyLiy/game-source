@@ -1,4 +1,4 @@
-#include <glad/glad.h>
+#include <OpenGL/glad.h>
 #include <GLFW/glfw3.h>
 #include "C:\Users\Zer0v\source\repos\Game\OpenGL\GLFW.h"
 
