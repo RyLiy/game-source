@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\Zer0v\Documents\Visual Studio 2022\game-source\build\CMakeFiles\b00f683acced1108b422dce8b5511095\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{275F29F8-F05F-33D0-9798-B55964456279}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
