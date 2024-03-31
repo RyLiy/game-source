@@ -13,3 +13,4 @@ target_link_libraries(GameLogic PRIVATE
  MessageBus
 
 )
+target_link_libraries(GameLogic PRIVATE OpenGL)
