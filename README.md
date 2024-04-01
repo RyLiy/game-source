@@ -20,10 +20,10 @@ Run the following commands:
    Change the current directory to the /build/ directory.
 
 3. `cmake ..`
-   This will point CMake to the source directory up one level. This will start compiling the program from the top level.
+   This will point CMake to the source directory up one level. This will start creating the build files from the top level.
 
 4. `cmake --build .`
-   This will make CMake build the executables.
+   This will make CMake compile the executables from the build files.
 
 5. `cd Debug`
    Change the directory into the Debug folder. The executable will be there.
