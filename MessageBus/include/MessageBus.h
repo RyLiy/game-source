@@ -40,6 +40,7 @@ private:
 
 class MessageBusNode {
 public:
+    //MessageBusNode(MessageBus* bus) : bus(bus) {} // Initialize bus in the constructor
     virtual void receiveMessage(Message* event);
     void sendMessage(std::string msg);
     void sendMessage(std::string msg, MessageBusNode* receiver);
